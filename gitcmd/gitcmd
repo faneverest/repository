@@ -1,0 +1,14 @@
+
+global config git
+
+git config --global user.name frank
+git config --global user.email fan.gunner@outlook.com
+
+
+
+git init
+// initialized empty Git repository
+
+
+
+
