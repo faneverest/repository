@@ -19,3 +19,8 @@ git status
 // On branch master
 // nothing to commit, working directory clean
 
+git diff
+
+git log
+
+[bad line, test revert]
