@@ -59,6 +59,85 @@ git checkout -- filedeleted
 
 git remote add origin https://github.com/faneverest/repository.git
 git push -u origin master
+// -u link the local and remote repository, in future, we can use
+git push  origin master
+// or
+git remote -v // display more info (push/fetch address)
+git push origin master
+git push origin newbranch
+
+
+//clone remote
+git clone git@github.com:faneverest/QuantAnalytics.git // this only clones master
+git checkout -b newbranch origin/newbranch  // clone remote newbranch to local
+git push origin newbranch // sync to remote newbranch
+
+
+// branch
+git checkout -b newbranch
+// now head points to newbranch
+
+git branch
+// list all branches
+
+// now git add/commit to the newbranch, not master
+
+git checkout master
+// now switch HEAD pointer back to master branch
+
+git merge newbranch
+// merge branches, now HEAD point to newbranch
+
+// usually git will use fast-forward mode to merge branches. 
+// this means when delete the newbranch, the newbranch info will lost
+// to disable the fast forward mode merge, we need make 'merge' a new commitL
+
+git merge --no-ff -m "new commit information" newbranch 
+
+
+git branch -d newbranch
+// delete newbranch
+
+// to fix conflict, add/commit then merge
+git log --graph --pretty=oneline --abbrev-commit
+// check the merge graphics
+
+// when working in remote, if other changes the branch, your copy is old, then you must pull and fix potential conflict
+git pull // if error as no tracking infomation, means needs to set up:
+git branch --set-upstream branch-name origin/branch-name
+git pull // pull again
+
+
+// when in the middle of working on one branch, we want to switch to another branch,
+// and cache the working status of this branch before switching
+git stash
+
+git checkout master
+git checkout -b anotherbranch
+git add
+git commit -m "works on anotherbranch"
+
+git checkout master
+git merge --no-ff -m "merge anotherbranch" anotherbranch
+git branch -d anotherbranch
+
+git checkout newbranch // get back to the stashed branch
+git status      // nothing to commit, where is the changes?
+git stash list      // check stash stack
+
+git stash apply      // retrieve the changes
+git stash drop      // delete stash
+
+// or
+git stash pop       // retrieve and drop
+
+// or
+git stash apply stash@{0}   // access 0th stash, use git stash list check item id
+
+
+// if one branch needs to be deleted before merge, we need to use -D
+git branch -D branchDelBeforeMerge
+
 
 
 
