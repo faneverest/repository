@@ -12,8 +12,10 @@ git init
 
 
 git add gitcmd [file2, file3...]
-git commit -m "git commands"
+// add files to stage
 
+git commit -m "git commands"
+// commit stage files to branch
 
 git status
 // On branch master
@@ -22,5 +24,44 @@ git status
 git diff
 
 git log
+git log --pretty=oneline
 
-[bad line, test revert]
+git reset --hard HEAD^
+// go back to last commit, use HEAD^^, 2 version ago, HEAD~100, 100 version ago
+
+git reflog
+// log for each comments
+// git log just the commit log
+
+
+git checkout -- filename
+// 1. if not added, abandom all changes
+// 2. if added, but modified, then abandom all modifications, only keep the added files
+
+git reset HEAD filename
+// added, but not commit, then abandom all added but not committed changes
+// the file is still showing up modified, use git checkout -- filename to abandom the modifications
+
+
+
+// to delete file, first rm filename, then
+git rm filename
+git commit
+
+// to revert the delete
+git checkout -- filedeleted
+
+
+// ssh, if there is no .ssh/id_rsa and .ssh/id_rsa.pub, do this
+// ssh-keygen -t rsa -C fan.gunner@outlook.com
+// id_rsa is private key, don't tell others
+// id_rsa.pub is public key, can be shared
+
+git remote add origin https://github.com/faneverest/repository.git
+git push -u origin master
+
+
+
+
+
+
