@@ -139,8 +139,74 @@ git stash apply stash@{0}   // access 0th stash, use git stash list check item i
 git branch -D branchDelBeforeMerge
 
 
+// tag, is nickname for snapshot
+
+// switch to branch needs to be tagged
+git branch
+git checkout master
+
+git tag v1.0 // tag the head
+git log --pretty=oneline --abbrev=commit
+git tag someid v0.9
+git tag -a v0.1 - m "version 0.1 released" <id>
+git tag -s v0.2 -m "signed, cannot forge" <id>
+
+git tag -d v0.1 // delete tag
+
+git push origin <tag> // push to remote
+git push origin --tags  // push all tags to remote 
+
+// delete remote tags, first delete in local, then push
+git tag -d <tag>
+git push origin :refs/tags/<tag>
+
+git tag // check all tags
+git show <tagname> check tag information
 
 
+// use github
+// click "fork" to clone one repository in own username, so that you can clone:
+git clone xxx
+// want to contribute your changes, fire one pull request
 
 
+// git config
+git config --global color.ui true
+git config --global alias.st status
+git config --global alias.co checkout
+git config --global alias.ci commit
+git config --global alias.br branch
+
+git config --global alias.unstage 'reset HEAD'
+git config --global alias.last 'log -1'
+
+// try git lg
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
+// --global for user, without it for current repository only
+// check .git/config under each repository for repository specific configurations
+// check ~/home/.gitconfig for user level configurations
+
+
+//.gitignore
+
+# Windows
+Thumbs.db
+Desktop.init
+
+# Python
+*.pyc
+*.so
+
+# My configurations:
+xx.xxx
+
+git add .gitignore
+git commit
+
+// force to add ignored files
+git add -f xxx.xx
+
+// check which rule triggered ignore xx.xx
+git check-ignore -v xx.xx
 
