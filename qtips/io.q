@@ -63,3 +63,57 @@ h: hopen `:/data/raw
 h[42]
 h 10 20 30
 hclose
+
+/ 11.1.5 writing and reading binary
+
+read1 `:/data/L set 10 20 30
+/0xfe200700....
+
+/ to write raw binary, as opposed to the internal representation of a q entity contianing the data
+`:/data/answer.bin 1: 0x06072a
+/:/data/answer.bin
+read1 `:/data/answer.bin
+/0x06072a
+
+/11.1.6 using dot amend
+
+/: write
+.[`:/data/raw; (); :; 1001 1002 1003]
+/`/data/raw
+get `:/data/raw
+/1001 1002 1003
+
+/, append
+.[`:/data/raw; (); ,; 42]
+get `:/data/raw
+/1001 1002 1003 42
+
+
+/ 11.2 save and load on tables
+
+/ save <-> using (set) with the table name as file name
+t:([] c1: `a `b `c; c2: 10 20 30)
+save `:/data/t
+`:/data/t
+get :/data/t
+/load creates a variable or overwrite existing
+load `:/data/t
+
+/ save to tab delimited file, use .txt
+save `:data/t.txt
+/`:data/t.txt
+/c1\t/c2\tc3
+/a\t\10\t1.1
+/b\t\20\t2.2
+
+/save to csv
+save `:data/t.csv
+
+/xml
+save `:data/t.xml
+
+/xls
+save `:data/t.xls
+
+
+
