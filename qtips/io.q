@@ -116,4 +116,113 @@ save `:data/t.xml
 save `:data/t.xls
 
 
+/ 11.3 splayed tables
+
+/ for larger tables that may not fit into memory, q can serialize each column of the table to its own file in a specified directory.
+/ when querying a splayed table, only the columns referred to will be loaded into memory.
+
+/ to use splay table, notice the / after path
+`:/data/tsplay/ set ([] c1: 10 20 30; c2: 1 2 3)
+/:/data/tsplay/
+
+/ in the os 
+/drwxr-xr-x 2 frank frank 4096 Jul  1 08:56 ./
+/drwxr-xr-x 3 frank frank 4096 Jul  1 08:56 ../
+/-rw-r--r-- 1 frank frank   40 Jul  1 08:56 c1
+/-rw-r--r-- 1 frank frank   40 Jul  1 08:56 c2
+/-rw-r--r-- 1 frank frank   14 Jul  1 08:56 .d
+
+/ splay restrictions
+1. all columns must be simple or compound lists (a list of simple lists of uniform type)
+2. symbol columns must be enumerated
+
+good example:
+`:/data/tok/ set ([] c1: 2000.01.01+til 3; c2: 1 2 3)
+`:/data/tok/ set ([] c1: 1 2 3; c2(1.1 2.2; enlist 3.3; 4.4; 5.5))
+
+bad example:
+`:/data/toops/ set ([] c1: 1 2 3; c2:(1;`1;"a"))
+/`type
+`:/data/toops/ set ([] c1:`a`b`c; c2:10 20 30)
+/`type
+
+The convention for enumerating symbols in splayed tables is to enumerate all symbol columns in all tables over the domain sym,
+and store the resulting sym list in the root directory:
+`:/db/tsplay/ set ([] `sym?c1:`a`b`c; c2: 10 20 30)
+/ ...
+sym
+/`a`b`c
+`:/db/sym set sym
+/:db/sym
+
+or use .Q.en:
+`:/db/tsplay/ set .Q.en[`:/db; ([] c1:`a`b`c; c2: 10 20 30)]
+
+11. 4 Text Data
+
+11.4.1 Reading and writing text files
+
+writing a text file using 0 will create if inexist and overwrite if exist
+q)`:/home/frank/data/solong.txt 0: ("so long"; "and thanks"; "for all the fish")
+`:/home/frank/data/solong.t
+
+read as char:
+q)read0 `:/home/frank/data/solong.txt
+"so long"
+"and thanks"
+"for all the fish"
+
+read as binary
+q)read1 `:/home/frank/data/solong.txt
+0x736f206c6f6e670a616e64207468616e6b730a666f7220616c6c2074686520666973680a
+
+cast between reads
+q)"x"$read0 `:/home/frank/data/solong.txt
+0x736f206c6f6e67
+0x616e64207468616e6b73
+0x666f7220616c6c207468652066697368
+
+q)"c"$read1 `:/home/frank/data/solong.txt
+"so long\nand thanks\nfor all the fish\n
+
+11.4.2 using hopen and hclose
+
+use h for binary, neg[h] for strings. file handle will append, not overwrite
+q)h:hopen `:/home/frank/data/new.txt
+q)neg[h] enlist "this"
+-3i
+q)h 
+3i
+q)neg[h] ("and"; "that")            
+-3i
+q)hclose h
+q)read0 `:/home/frank/data/new.txt
+"this"
+"and"
+"that"
+
+11.4.3 Preparing text
+
+overloaded 0, left is delimiter, right is the data to format
+
+q)t:([] c1:`a`b`c; c2: 1 2 3)
+q)"\t" 0: t
+"c1\tc2"
+"a\t1"
+"b\t2"
+"c\t3"
+
+q)csv
+","
+q)csv 0: t
+"c1,c2"
+"a,1"
+"b,2"
+"c,3"
+
+
+q)`:/home/frank/data/t.csv 0: csv 0: t
+`:/home/frank/data/t.csv
+
+0: the left is to wirte data, the right is to prepare data
 
